@@ -11,7 +11,7 @@ Module.register("MMM-Chart", {
     defaults: {
         width       : 200,
         height      : 200,
-        url         : '',
+        url         : 'http://192.168.1.88:12346/test/energiesd',
         chartConfig : {}
     },
 

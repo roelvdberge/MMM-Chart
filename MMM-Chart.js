@@ -11,6 +11,7 @@ Module.register("MMM-Chart", {
     defaults: {
         width       : 200,
         height      : 200,
+        url         : '',
         chartConfig : {}
     },
 

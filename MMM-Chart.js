@@ -8,17 +8,19 @@
  */
 
 Module.register("MMM-Chart", {
+
         jsonData: null,
         defaults: {
                 width: 200,
                 height: 200,
-                url: 'http://192.168.1.88:12346/test/energie',
-                updateInterval: 15000,
+                url: '',
+                updateInterval: 7200,
                 chartConfig: {}
         },
 
         getScripts: function () {
-                return ["modules/" + this.name + "/node_modules/chart.js/dist/Chart.bundle.min.js"];
+                // return ["modules/" + this.name + "/node_modules/chart.js/dist/Chart.bundle.min.js"];
+                return ["modules/MMM-Chart/node_modules/chart.js/dist/chart.umd.js"];
         },
 
         start: function () {
@@ -30,9 +32,10 @@ Module.register("MMM-Chart", {
 
         scheduleUpdate() {
                 const self = this;
+                const interval = this.config.updateInterval * 1000;
                 setInterval(() => {
                         self.getJson();
-                }, this.config.updateInterval);
+                }, interval);
         },
 
         // Request node_helper to get json from url
@@ -61,13 +64,28 @@ Module.register("MMM-Chart", {
                         return wrapperEl;
                 }
 
-                Log.info(this.jsonData);
+                Log.info(this.jsonData.data);
+
+                this.config.chartConfig.data.datasets[0].data = this.jsonData.data;
+                Log.info(this.config.chartConfig);
 
                 // this.config.chartConfig
                 // Create chart canvas
                 const chartEl = document.createElement("canvas");
 
                 // Init chart.js
+                Chart.defaults.color = 'white';
+                var dataset = this.config.chartConfig.data.datasets[0];
+                for (var i = 0; i < dataset.data.length; i++) {
+                        if (dataset.data[i].x > 0) {
+                                dataset.backgroundColor[i] = 'rgba(255,0,0,0.4)';
+                                dataset.borderColor[i] = 'rgba(255,0,0,1)';
+                        } else {
+                                dataset.backgroundColor[i] = 'rgba(0,255,0,0.4)';
+                                dataset.borderColor[i] = 'rgba(0,255,0,1)';
+                        }
+                }
+
                 this.chart = new Chart(chartEl.getContext("2d"), this.config.chartConfig);
 
                 // Set the size

@@ -42,7 +42,7 @@ Module.register("MMM-Chart", {
 
         // Request node_helper to get json from url
         getJson() {
-                Log.info("Get JSON (execute sendSocketNotification)");
+                Log.info("Get JSON (execute sendSocketNotification), from URL " + this.config.url);
                 this.sendSocketNotification("MMM-Chart_GET_JSON", this.config.url);
         },
 

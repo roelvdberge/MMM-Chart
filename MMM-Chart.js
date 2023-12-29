@@ -41,6 +41,7 @@ Module.register("MMM-Chart", {
 
         // Request node_helper to get json from url
         getJson() {
+                Log.info("Oooh, about to get a JSON!");
                 this.sendSocketNotification("MMM-Chart_GET_JSON", this.config.url);
         },
 

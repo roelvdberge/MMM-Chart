@@ -35,12 +35,14 @@ Module.register("MMM-Chart", {
                 const self = this;
                 const interval = this.config.updateInterval * 1000;
                 setInterval(() => {
+                        Log.info("Get JSON in interval of 1000ms");
                         self.getJson();
                 }, interval);
         },
 
         // Request node_helper to get json from url
         getJson() {
+                Log.info("Get JSON (execute sendSocketNotification)");
                 this.sendSocketNotification("MMM-Chart_GET_JSON", this.config.url);
         },
 

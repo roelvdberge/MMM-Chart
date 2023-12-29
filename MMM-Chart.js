@@ -11,16 +11,17 @@ Module.register("MMM-Chart", {
 
         jsonData: null,
         defaults: {
-                width: 200,
-                height: 200,
+                width: 600,
+                height: 600,
                 url: '',
-                updateInterval: 7200,
+                updateInterval: 300,
                 chartConfig: {}
         },
 
         getScripts: function () {
                 // return ["modules/" + this.name + "/node_modules/chart.js/dist/Chart.bundle.min.js"];
-                return ["modules/MMM-Chart/node_modules/chart.js/dist/chart.umd.js"];
+                return ["modules/MMM-Chart/node_modules/chart.js/dist/chart.umd.js",
+                        "modules/MMM-Chart/node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"];
         },
 
         start: function () {
@@ -44,6 +45,7 @@ Module.register("MMM-Chart", {
         },
 
         socketNotificationReceived(notification, payload) {
+                Log.info("Apparently received a socket notification: " + notification );
                 if (notification === "MMM-Chart_JSON_RESULT") {
                         // Only continue if the notification came from the request we made
                         // This way we can load the module more than once
@@ -60,7 +62,7 @@ Module.register("MMM-Chart", {
                 wrapperEl.setAttribute("style", "position: relative; display: inline-block;");
 
                 if (!this.jsonData) {
-                        wrapperEl.innerHTML = "Awaiting json data...";
+                        wrapperEl.innerHTML = "Loading...";
                         return wrapperEl;
                 }
 
@@ -75,6 +77,7 @@ Module.register("MMM-Chart", {
 
                 // Init chart.js
                 Chart.defaults.color = 'white';
+                Chart.register(ChartDataLabels);
                 var dataset = this.config.chartConfig.data.datasets[0];
                 for (var i = 0; i < dataset.data.length; i++) {
                         if (dataset.data[i].x > 0) {

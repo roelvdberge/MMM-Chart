@@ -12,6 +12,7 @@ module.exports = NodeHelper.create({
 
   getJson(url) {
     const self = this;
+    Log.info("Get stuff");
 
     fetch(url)
       .then((response) => response.json())
@@ -26,7 +27,8 @@ module.exports = NodeHelper.create({
 
   // Subclass socketNotificationReceived received.
   socketNotificationReceived(notification, url) {
-    if (notification === "MMM-Chart_GET_JSON") {
+    Log.info("Apparently received a socket notification");
+        if (notification === "MMM-Chart_GET_JSON") {
       this.getJson(url);
     }
   }
